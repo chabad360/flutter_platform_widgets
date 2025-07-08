@@ -19,18 +19,29 @@ class PlatformWidgetBuilder extends StatelessWidget {
   final Widget? Function(BuildContext, Widget?, PlatformTarget)? cupertino;
   final Widget? Function(BuildContext, Widget?, PlatformTarget)? material;
 
-  const PlatformWidgetBuilder({
-    super.key,
-    this.cupertino,
-    this.material,
-    this.child,
-  });
+  const PlatformWidgetBuilder({super.key, this.cupertino, this.material, this.child});
 
   @override
   Widget build(BuildContext context) {
     return PlatformWidget(
       cupertino: (context, target) => cupertino?.call(context, child, target),
       material: (context, target) => material?.call(context, child, target),
+    );
+  }
+}
+
+class PlatformNestedWidgetBuilder extends StatelessWidget {
+  final List<Widget>? children;
+  final Widget? Function(BuildContext, List<Widget>?, PlatformTarget)? cupertino;
+  final Widget? Function(BuildContext, List<Widget>?, PlatformTarget)? material;
+
+  const PlatformNestedWidgetBuilder({super.key, this.cupertino, this.material, this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      cupertino: (context, target) => cupertino?.call(context, children, target),
+      material: (context, target) => material?.call(context, children, target),
     );
   }
 }
