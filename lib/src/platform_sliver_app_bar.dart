@@ -182,6 +182,7 @@ class PlatformSliverAppBar
   final bool? stretch;
   final Widget? title;
   final PreferredSizeWidget? bottom;
+  final Widget? trailing;
 
   //Platform
   final PlatformBuilder<MaterialSliverAppBarData>? material;
@@ -197,6 +198,7 @@ class PlatformSliverAppBar
     this.stretch,
     this.title,
     this.bottom,
+    this.trailing,
     //Platform
     this.material,
     this.cupertino,
@@ -214,9 +216,9 @@ class PlatformSliverAppBar
       backgroundColor: data?.backgroundColor ?? backgroundColor,
       stretch: data?.stretch ?? stretch ?? false,
       title: data?.title ?? title,
+      actions: data?.actions ?? (trailing != null ? [trailing!] : null),
 
       //Material only
-      actions: data?.actions,
       flexibleSpace: data?.flexibleSpace,
       bottom: data?.bottom ?? bottom,
       elevation: data?.elevation,
@@ -264,13 +266,13 @@ class PlatformSliverAppBar
       backgroundColor: data?.backgroundColor ?? backgroundColor,
       stretch: data?.stretch ?? stretch ?? false,
       largeTitle: data?.title ?? title,
+      trailing: data?.trailing ?? trailing,
 
       //Cupertino only
       automaticallyImplyTitle: data?.automaticallyImplyTitle ?? true,
       alwaysShowMiddle: data?.alwaysShowMiddle ?? true,
       previousPageTitle: data?.previousPageTitle,
       middle: data?.middle,
-      trailing: data?.trailing,
       border: data?.border ?? _kDefaultNavBarBorder,
       brightness: data?.brightness,
       padding: data?.padding,
