@@ -403,6 +403,8 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
   final bool? stylusHandwritingEnabled;
   final Widget? suffix;
 
+  final isNumeric;
+
   static Widget _defaultMaterialContextMenuBuilder(BuildContext context, EditableTextState editableTextState) {
     return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
   }
@@ -473,7 +475,74 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.suffix,
     this.material,
     this.cupertino,
-  }) : keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline);
+  }) : keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+       isNumeric = false;
+
+  PlatformTextField.numeric({
+    super.key,
+    this.widgetKey,
+    this.controller,
+    this.focusNode,
+    TextInputType? keyboardType = const TextInputType.numberWithOptions(decimal: true),
+    this.textInputAction,
+    this.textCapitalization = TextCapitalization.none,
+    this.style,
+    this.textAlign = TextAlign.end,
+    this.autofocus,
+    this.obscureText,
+    this.autocorrect,
+    this.maxLines = 1,
+    this.maxLength,
+    this.onChanged,
+    this.onEditingComplete,
+    this.onSubmitted,
+    List<TextInputFormatter>? inputFormatters,
+    this.enabled = true,
+    this.cursorWidth,
+    this.cursorRadius,
+    this.cursorColor,
+    this.keyboardAppearance,
+    this.scrollPadding,
+    this.dragStartBehavior,
+    this.minLines,
+    this.expands,
+    this.scrollPhysics,
+    this.strutStyle,
+    this.enableInteractiveSelection,
+    this.scrollController,
+    this.onTap,
+    this.readOnly,
+    this.showCursor,
+    this.textAlignVertical,
+    this.smartDashesType,
+    this.smartQuotesType,
+    this.selectionHeightStyle,
+    this.selectionWidthStyle,
+    this.obscuringCharacter,
+    this.autofillHints,
+    this.cursorHeight,
+    this.restorationId,
+    this.maxLengthEnforcement,
+    this.selectionControls,
+    this.hintText,
+    this.enableIMEPersonalizedLearning,
+    this.makeCupertinoDecorationNull = true,
+    this.clipBehavior = Clip.hardEdge,
+    this.contextMenuBuilder,
+    this.onTapOutside,
+    this.spellCheckConfiguration,
+    this.magnifierConfiguration,
+    this.contentInsertionConfiguration,
+    this.cursorOpacityAnimates,
+    this.undoController,
+    this.groupId,
+    this.stylusHandwritingEnabled,
+    this.suffix,
+    this.material,
+    this.cupertino,
+  }) : keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+       inputFormatters = inputFormatters ?? [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))],
+       isNumeric = true;
 
   @override
   TextField createMaterialWidget(BuildContext context) {
@@ -482,7 +551,12 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     final hintText = this.hintText;
     final decoration = hintText == null && suffix == null
         ? (data?.decoration ?? const InputDecoration())
-        : _inputDecorationWith(hintText, suffix, data?.decoration ?? const InputDecoration());
+        : _inputDecorationWith(
+            hintText,
+            suffix,
+            data?.decoration ?? const InputDecoration(),
+            isNumeric ? OutlineInputBorder() : null,
+          );
 
     return TextField(
       key: data?.widgetKey ?? widgetKey,
@@ -641,10 +715,16 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     );
   }
 
-  InputDecoration _inputDecorationWith(String? hintText, Widget? suffix, InputDecoration inputDecoration) {
+  InputDecoration _inputDecorationWith(
+    String? hintText,
+    Widget? suffix,
+    InputDecoration inputDecoration,
+    InputBorder? border,
+  ) {
     return inputDecoration.copyWith(
       hintText: inputDecoration.hintText ?? hintText,
       suffix: inputDecoration.suffix ?? suffix,
+      border: inputDecoration.border ?? border,
     );
   }
 }
