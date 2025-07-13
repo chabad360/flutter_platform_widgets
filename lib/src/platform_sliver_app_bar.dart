@@ -24,6 +24,7 @@ abstract class _BaseData {
     this.stretch,
     this.title,
     this.bottom,
+    this.trailingActions,
   });
 
   final Key? widgetKey;
@@ -33,6 +34,7 @@ abstract class _BaseData {
   final bool? stretch;
   final Widget? title;
   final PreferredSizeWidget? bottom;
+  final List<Widget>? trailingActions;
 }
 
 class MaterialSliverAppBarData extends _BaseData {
@@ -182,7 +184,7 @@ class PlatformSliverAppBar
   final bool? stretch;
   final Widget? title;
   final PreferredSizeWidget? bottom;
-  final Widget? trailing;
+  final List<Widget>? trailingActions;
 
   //Platform
   final PlatformBuilder<MaterialSliverAppBarData>? material;
@@ -198,7 +200,7 @@ class PlatformSliverAppBar
     this.stretch,
     this.title,
     this.bottom,
-    this.trailing,
+    this.trailingActions,
     //Platform
     this.material,
     this.cupertino,
@@ -216,7 +218,7 @@ class PlatformSliverAppBar
       backgroundColor: data?.backgroundColor ?? backgroundColor,
       stretch: data?.stretch ?? stretch ?? false,
       title: data?.title ?? title,
-      actions: data?.actions ?? (trailing != null ? [trailing!] : null),
+      actions: data?.actions ?? trailingActions,
 
       //Material only
       flexibleSpace: data?.flexibleSpace,
@@ -256,6 +258,14 @@ class PlatformSliverAppBar
   @override
   CupertinoSliverNavigationBar createCupertinoWidget(BuildContext context) {
     final data = cupertino?.call(context, platform(context));
+
+    final trailing = trailingActions?.isEmpty ?? true
+        ? null
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: trailingActions!,
+          );
 
     return CupertinoSliverNavigationBar(
       //Common
