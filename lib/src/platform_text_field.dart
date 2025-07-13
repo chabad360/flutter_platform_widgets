@@ -15,7 +15,13 @@ import 'package:flutter/cupertino.dart'
         OverlayVisibilityMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart'
-    show AdaptiveTextSelectionToolbar, InputCounterWidgetBuilder, InputDecoration, TextField;
+    show
+        AdaptiveTextSelectionToolbar,
+        InputCounterWidgetBuilder,
+        InputDecoration,
+        TextField,
+        OutlineInputBorder,
+        InputBorder;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
