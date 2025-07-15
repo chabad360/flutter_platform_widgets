@@ -408,6 +408,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
   final Object? groupId;
   final bool? stylusHandwritingEnabled;
   final Widget? suffix;
+  final Widget? prefix;
 
   final isNumeric;
 
@@ -479,6 +480,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.groupId,
     this.stylusHandwritingEnabled,
     this.suffix,
+    this.prefix,
     this.material,
     this.cupertino,
   }) : keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
@@ -493,7 +495,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.textInputAction,
     this.textCapitalization = TextCapitalization.none,
     this.style,
-    this.textAlign = TextAlign.end,
+    this.textAlign,
     this.autofocus,
     this.obscureText,
     this.autocorrect,
@@ -544,6 +546,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.groupId,
     this.stylusHandwritingEnabled,
     this.suffix,
+    this.prefix,
     this.material,
     this.cupertino,
   }) : keyboardType = keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
@@ -555,11 +558,12 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     final data = material?.call(context, platform(context));
 
     final hintText = this.hintText;
-    final decoration = hintText == null && suffix == null
+    final decoration = hintText == null && suffix == null && prefix == null
         ? (data?.decoration ?? const InputDecoration())
         : _inputDecorationWith(
             hintText,
             suffix,
+            prefix,
             data?.decoration ?? const InputDecoration(),
             isNumeric ? OutlineInputBorder() : null,
           );
@@ -673,7 +677,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       placeholderStyle:
           data?.placeholderStyle ??
           const TextStyle(fontWeight: FontWeight.w400, color: CupertinoColors.placeholderText),
-      prefix: data?.prefix,
+      prefix: data?.prefix ?? prefix,
       prefixMode: data?.prefixMode ?? OverlayVisibilityMode.always,
       suffix: data?.suffix ?? suffix,
       suffixMode: data?.suffixMode ?? OverlayVisibilityMode.always,
@@ -724,12 +728,14 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
   InputDecoration _inputDecorationWith(
     String? hintText,
     Widget? suffix,
+    Widget? prefix,
     InputDecoration inputDecoration,
     InputBorder? border,
   ) {
     return inputDecoration.copyWith(
       hintText: inputDecoration.hintText ?? hintText,
       suffix: inputDecoration.suffix ?? suffix,
+      prefix: inputDecoration.prefix ?? prefix,
       border: inputDecoration.border ?? border,
     );
   }
